@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDmapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.ProviderDao">
+
+    <insert id="add">
+        insert into smbms_provider(proCode, proName, proDesc, proContact, proPhone,
+                                   proAddress, proFax, createdBy, creationDate)
+        values (#{proCode}, #{proName}, #{proDesc}, #{proContact}, #{proPhone}, #{proAddress},
+                #{proFax}, #{createdBy}, #{creationDate})
+    </insert>
+
+    <delete id="deleteProviderById">
+        delete from smbms_provider where id = #{delid}
+    </delete>
+
+    <update id="modify" parameterType="Provider">
+        update smbms_provider
+        set proCode    = #{proCode},
+            proName    = #{proName},
+            proDesc    = #{proDesc},
+            proContact = #{proContact},
+            proPhone   = #{proPhone},
+            proAddress = #{proAddress},
+            proFax     = #{proFax},
+            modifyBy   = #{modifyBy},
+            modifyDate = #{modifyDate}
+        where id = #{id}
+    </update>
+
+    <select id="getBillCountByProviderId" resultType="java.lang.Integer">
+        select count(*) from smbms_bill where providerId = #{delid}
+    </select>
+
+    <select id="getProviderList" resultType="Provider">
+        select * from smbms_provider
+        <where>
+            <if test="proName != null and proName != ''">
+                proName like concat('%' , #{proName} , '%')
+            </if>
+            <if test="proCode != null and proCode != ''">
+                proCode like concat('%' , #{proCode} , '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getProviderById" resultType="Provider">
+        select *
+        from smbms_provider
+        where id = #{id}
+    </select>
+
+    <select id="providerCodeExist" resultType="java.lang.Integer">
+        select count(*)
+        from smbms_provider
+        where proCode = #{proCode}
+    </select>
+
+
+</mapper>
